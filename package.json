@@ -1,0 +1,23 @@
+{
+  "name": "sentinel",
+  "version": "1.0.0",
+  "description": "small script utility to check website list status",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cristianofromagio/Sentinel.git"
+  },
+  "keywords": [
+    "sentinel"
+  ],
+  "author": "Cristiano Fromagio",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cristianofromagio/Sentinel/issues"
+  },
+  "homepage": "https://github.com/cristianofromagio/Sentinel#readme"
+}
