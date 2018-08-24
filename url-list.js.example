@@ -1,0 +1,8 @@
+'use strict';
+
+let sites = [
+    'https://google.com.br',
+    'http://example.com'
+];
+
+module.exports = sites;
