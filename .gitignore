@@ -1,4 +1,7 @@
+# SENTINEL
 url-list.js
+reports/*
+!reports/template.html
 
 # Logs
 logs
