@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Check Link - Relatório: {{ datetime }}</title>
+  <style>
+    * {
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Sites fora do ar:</h1>
+  <ul>
+    {{#results}}
+      <li>
+        {{ url }} <br>
+        <b>Código HTTP:</b> {{ code }} <br>
+        <b>Status:</b> {{ status }}
+      </li> <br>
+    {{/results}}
+  </ul>
+</body>
+</html>
+
+<!--
+
+  {
+    'datetime': 'Ago 28, 2018 - 16:22',
+    'results': [
+      {
+        'url': 'http://example404.com',
+        'code': '404',
+        'status': 'dead'
+      },
+      {
+        'url': 'http://example403.com',
+        'code': '403',
+        'status': undefined
+      }
+    ]
+  }
+
+-->

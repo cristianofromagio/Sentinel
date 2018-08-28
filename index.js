@@ -1,6 +1,8 @@
 const checkLinks = require('check-links')
 const notifier = require('node-notifier')
 const path = require('path')
+const fs = require('fs')
+const mustache = require('mustache')
 
 const urlList = require('./url-list')
 
@@ -26,24 +28,52 @@ runTests()
 
 function displayData(resultsFetch) {
 
-    let message = '';
+    let month = ['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
+
+    let reportData = {};
+    let date = new Date();
+    
+    reportData.filename = `${date.getFullYear()}${month[date.getMonth()]}${date.getDate()}-${date.getHours()}${('0'+date.getMinutes()).slice(-2)}`;
+    reportData.datetime = `${date.getDate()}/${month[date.getMonth()]}/${date.getFullYear()} - ${date.getHours()}:${('0'+date.getMinutes()).slice(-2)}`;
+    reportData.results = [];
 
     for (let i = 0; i < urlList.length; i++) {
 
         if (resultsFetch[urlList[i]].statusCode != 200) {
+
+            let offlineResult = {};
+
+            offlineResult.url = urlList[i]
+            offlineResult.status = resultsFetch[urlList[i]].status
+            offlineResult.code = resultsFetch[urlList[i]].statusCode
+            reportData.results.push(offlineResult)
+
             console.log(`${urlList[i]} `, resultsFetch[urlList[i]])
-            message += '\n' + urlList[i]
+
         }
 
     }
     
-    if (message.length > 0) {
+    if (reportData.results.length > 0) {
+
         notifier.notify({
-            title: 'Sites fora do ar!',
-            message: 'Os sites estão fora do ar:' + message,
+            title: '🚧 Relatório SENTINEL 🚧',
+            message: 'Alguns sites estão fora do ar.\nVerifique o último relatório gerado!',
             icon: path.join(__dirname, 'error-icon.png'),
             sound: true
         })
+        
+        let template = fs.readFileSync("./reports/template.html", "utf8")
+
+        writeReport(template, reportData)
+
     }
+
+}
+
+function writeReport(template, data) {
+
+    let html = mustache.to_html(template, data)
+    fs.writeFileSync(`./reports/${data.filename}.html`, html)
 
 }
