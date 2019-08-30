@@ -14,9 +14,14 @@ const argv = require('yargs').argv;
 const tcpp = require('tcp-ping');
 const tcpprobe = util.promisify(tcpp.probe);
 
-const urls = require('./watchable-list');
-const configs = require('./configs');
+const urls = require('./config/watchable-list');
+const configs = require('./config/configs');
 const urlPromises = [];
+
+const requiredFiles = [
+    './config/watchable-list.js',
+    './config/configs.js',
+];
 
 function sendSlackMessage (webhookURL, messageBody) {
   try {
@@ -127,6 +132,21 @@ function handleNotifications(probeResult) {
     }
 }
 
+gulp.task('check-required-files', function (done) {
+    const dataFiles = glob.sync('./config/**', { nodir: true });
+    let requiredError;
+
+    requiredFiles.forEach(function(file) {
+        if (dataFiles.indexOf(file) < 0) {
+            requiredError = new PluginError('missing required files in folder', 'error message (doesnt display anyways)', { showStack: true });
+            console.error(requiredError.toString());
+            return process.exit(2);
+        }
+    });
+
+    done();
+});
+
 gulp.task('prepare', function (done) {
     for (var i = 0; i < urls.length; i++) {
         urlPromises.push(tcpprobe(urls[i], 80));
@@ -153,7 +173,7 @@ gulp.task('greetings', function(done) {
 
 // gulp.task('compile', gulp.series('check-required-files', gulp.parallel('mustache', 'copy-images'), 'copy-global-style'));
 
-gulp.task('status', gulp.series('prepare', 'ping'));
-gulp.task('sentinel', gulp.series('prepare', 'start-timer'));
+gulp.task('status', gulp.series('check-required-files', 'prepare', 'ping'));
+gulp.task('sentinel', gulp.series('check-required-files', 'prepare', 'start-timer'));
 
 gulp.task('default', gulp.task('status'));
