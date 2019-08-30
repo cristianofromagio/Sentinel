@@ -1,5 +1,7 @@
 # SENTINEL
 url-list.js
+watchable-list.js
+configs.js
 reports/*
 !reports/template.html
 
