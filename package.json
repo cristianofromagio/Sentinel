@@ -30,5 +30,8 @@
     "tasktimer": "^3.0.0",
     "tcp-ping": "^0.1.1",
     "yargs": "^14.0.0"
+  },
+  "devDependencies": {
+    "mem": ">=4.0.0"
   }
 }
